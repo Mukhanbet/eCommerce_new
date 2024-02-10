@@ -16,4 +16,5 @@ public class SellerResponse {
     private String lastname;
     private LocalDate dateOfBirth;
     private int cardNumber;
+    private String phoneNumber;
 }

@@ -21,6 +21,7 @@ public class SellerMapperImpl implements SellerMapper {
         sellerResponse.setLastname(seller.getLastName());
         sellerResponse.setDateOfBirth(seller.getDateOfBirth());
         sellerResponse.setCardNumber(seller.getCardNumber());
+        sellerResponse.setPhoneNumber(seller.getPhoneNumber());
         return sellerResponse;
     }
 

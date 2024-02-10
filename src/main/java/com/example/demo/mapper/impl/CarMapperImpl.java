@@ -21,6 +21,8 @@ public class CarMapperImpl implements CarMapper {
         carResponse.setCountry(car.getCountry());
         carResponse.setPrice(car.getPrice());
         carResponse.setOwner(car.getSeller().getName());
+        carResponse.setAvailable(car.isAvailable());
+        carResponse.setAmount(car.getAmount());
         return carResponse;
     }
 

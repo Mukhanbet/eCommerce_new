@@ -19,9 +19,34 @@ public class CarController {
         return carService.getAll();
     }
 
+    @GetMapping("/getAvailableCars")
+    public List<CarResponse> getAllAvailableCars() {
+        return carService.getAllAvailableCars();
+    }
+
+    @GetMapping("/getSolvedCars")
+    public List<CarResponse> getSolvedCars() {
+        return carService.getSolvedCars();
+    }
+
+    @GetMapping("/getCarsSortedByPrice/{order}")
+    public List<CarResponse> getCarsSortedByPrice(@PathVariable String order) {
+        return carService.getCarsSortedByPrice(order);
+    }
+
     @GetMapping("/getByType/{type}")
     public List<CarResponse> getByType(@PathVariable String type) {
         return carService.getByType(type);
+    }
+
+    @GetMapping("/compareWith/{firstId}/{secondId}")
+    public List<String> compareWith(@PathVariable Long firstId, @PathVariable Long secondId) {
+        return carService.compareWith(firstId, secondId);
+    }
+
+    @GetMapping("/getSolvedCarsByType/{type}")
+    public List<CarResponse> getSolvedCarsByType(@PathVariable String type) {
+        return carService.getSolvedCarsByType(type);
     }
 
     @GetMapping("/findById/{id}")
