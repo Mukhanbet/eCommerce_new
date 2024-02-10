@@ -15,9 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -26,20 +24,87 @@ public class CarServiceImpl implements CarService {
     private final CarMapper carMapper;
     private final TypeRepository typeRepository;
     private final SellerRepository sellerRepository;
+
+    // todo add the filter where will display the cars ordered by type
+    // todo add the filter where will display the cars by created day;
     @Override
     public List<CarResponse> getAll() {
         return carMapper.toDtoS(carRepository.findAll());
     }
 
     @Override
+    public List<CarResponse> getAllAvailableCars() {
+        List<Car> availableCars = new ArrayList<>();
+        for(Car car : carRepository.findAll()) {
+            if(car.isAvailable()) {
+                availableCars.add(car);
+            }
+        }
+        return carMapper.toDtoS(availableCars);
+    }
+
+    @Override
+    public List<CarResponse> getSolvedCars() {
+        List<Car> solvedCars = new ArrayList<>();
+        for(Car car : carRepository.findAll()) {
+            if(!car.isAvailable()) {
+                solvedCars.add(car);
+            }
+        }
+        return carMapper.toDtoS(solvedCars);
+    }
+
+    @Override
+    public List<CarResponse> getCarsSortedByPrice(String order) {
+        List<Car> carsByKillingPrice = new ArrayList<>();
+        for(Car car : carRepository.findAll()) {
+            if(car.isAvailable()) {
+                carsByKillingPrice.add(car);
+            }
+        }
+        if(order.equalsIgnoreCase("increasing")) {
+            Collections.sort(carsByKillingPrice, (car1, car2) -> Double.compare(car2.getPrice(), car1.getPrice()));
+        } else if (order.equalsIgnoreCase("killing")) {
+            Collections.sort(carsByKillingPrice, Comparator.comparingDouble(Car::getPrice));
+        }
+        return carMapper.toDtoS(carsByKillingPrice);
+    }
+
+    @Override
     public List<CarResponse> getByType(String type) {
         List<Car> cars = new ArrayList<>();
         for(Car car : carRepository.findAll()) {
-            if(car.getType().getName().equals(type.toUpperCase())) {
+            if(car.getType().getName().equals(type.toUpperCase()) && car.isAvailable()) {
                 cars.add(car);
             }
         }
         return carMapper.toDtoS(cars);
+    }
+
+    @Override
+    public List<String> compareWith(Long firstId, Long secondId) {
+        Optional<Car> firstCar = carRepository.findById(firstId);
+        checker(firstCar, firstId);
+        Optional<Car> secondCar = carRepository.findById(secondId);
+        checker(secondCar, secondId);
+        List<String> difference = new ArrayList<>();
+        difference.add("Name:    " + firstCar.get().getName() + "     " + secondCar.get().getName());
+        difference.add("Color:   " + firstCar.get().getColor() + "    " + secondCar.get().getColor());
+        difference.add("Year:     " + firstCar.get().getYear() + "     " + secondCar.get().getYear());
+        difference.add("Country:  " + firstCar.get().getCountry() + "  " + secondCar.get().getCountry());
+        difference.add("Price:    " + firstCar.get().getPrice() + "    " + secondCar.get().getPrice());
+        return difference;
+    }
+
+    @Override
+    public List<CarResponse> getSolvedCarsByType(String type) {
+        List<Car> solvedCarsSameType = new ArrayList<>();
+        for(Car car : carRepository.findAll()) {
+            if(car.getType().getName().equals(type.toUpperCase()) && !car.isAvailable()) {
+                solvedCarsSameType.add(car);
+            }
+        }
+        return carMapper.toDtoS(solvedCarsSameType);
     }
 
     @Override
@@ -58,6 +123,8 @@ public class CarServiceImpl implements CarService {
         car.get().setYear(carRequest.getYear());
         car.get().setCountry(carRequest.getCountry());
         car.get().setPrice(carRequest.getPrice());
+        car.get().setAvailable(carRequest.isAvailable());
+        car.get().setAmount(carRequest.getAmount());
 
         Optional<Type> type = typeRepository.findByName(carRequest.getType().toUpperCase());
         if(type.isEmpty()) {
@@ -82,6 +149,8 @@ public class CarServiceImpl implements CarService {
         car.setYear(carRequest.getYear());
         car.setCountry(carRequest.getCountry());
         car.setPrice(carRequest.getPrice());
+        car.setAvailable(carRequest.isAvailable());
+        car.setAmount(carRequest.getAmount());
         Optional<Type> type = typeRepository.findByName(carRequest.getType().toUpperCase());
         if(type.isEmpty()) {
             throw new NotFoundException("In the system this type: " + carRequest.getType() + " doesn't exist", HttpStatus.NOT_FOUND);

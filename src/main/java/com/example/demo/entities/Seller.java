@@ -25,6 +25,7 @@ public class Seller {
     private String lastName;
     private LocalDate dateOfBirth;
     private int cardNumber;
+    private String phoneNumber;
 
 
     @OneToOne(cascade = CascadeType.ALL)

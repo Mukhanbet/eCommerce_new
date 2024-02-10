@@ -47,6 +47,7 @@ public class SellerServiceImpl implements SellerService {
         seller.get().setLastName(sellerRequest.getLastName());
         seller.get().setDateOfBirth(sellerRequest.getDateOfBirth());
         seller.get().setCardNumber(sellerRequest.getCardNumber());
+        seller.get().setPhoneNumber(sellerRequest.getPhoneNumber());
         User user = seller.get().getUser();
         user.setEmail(sellerRequest.getEmail());
         user.setPassword(sellerRequest.getPassword());

@@ -15,4 +15,5 @@ public class SellerRequest {
     private String lastName;
     private LocalDate dateOfBirth;
     private int cardNumber;
+    private String phoneNumber;
 }

@@ -17,7 +17,9 @@ public class Car {
     private String color;
     private int year;
     private String country;
-    private int price;
+    private double price;
+    private boolean available;
+    private int amount;
 
     // todo add here the phone number of Seller!
 
