@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.example.demo.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,8 @@ public class Admin {
 
     @Column(unique = true)
     private String email;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private String password;
     private String name;
     private String lastName;
