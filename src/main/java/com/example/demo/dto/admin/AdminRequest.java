@@ -8,6 +8,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class AdminRequest {
+    private String email;
+    private String password;
     private String name;
     private String lastName;
     private LocalDate dateOfBirth;

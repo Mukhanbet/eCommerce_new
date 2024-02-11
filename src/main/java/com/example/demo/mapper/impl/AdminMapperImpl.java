@@ -16,12 +16,12 @@ public class AdminMapperImpl implements AdminMapper {
         AdminResponse adminResponse = new AdminResponse();
         adminResponse.setId(admin.getId());
         adminResponse.setName(admin.getName());
-//        adminResponse.setEmail(admin.getEmail());
-//        adminResponse.setRole(String.valueOf(admin.getRole()));
-//        adminResponse.setPassword(admin.getPassword());
         adminResponse.setEmail(admin.getEmail());
         adminResponse.setRole(String.valueOf(admin.getRole()));
         adminResponse.setPassword(admin.getPassword());
+        adminResponse.setLastName(admin.getLastName());
+        adminResponse.setDateOfBirth(admin.getDateOfBirth());
+        adminResponse.setPortfolio(admin.getPortfolio());
         return adminResponse;
     }
 
