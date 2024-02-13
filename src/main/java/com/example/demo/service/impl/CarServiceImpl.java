@@ -5,11 +5,13 @@ import com.example.demo.dto.car.CarResponse;
 import com.example.demo.entities.Car;
 import com.example.demo.entities.Seller;
 import com.example.demo.entities.Type;
+import com.example.demo.entities.User;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.CarMapper;
 import com.example.demo.repositories.CarRepository;
 import com.example.demo.repositories.SellerRepository;
 import com.example.demo.repositories.TypeRepository;
+import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.CarService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public class CarServiceImpl implements CarService {
     private final CarMapper carMapper;
     private final TypeRepository typeRepository;
     private final SellerRepository sellerRepository;
+    private final UserRepository userRepository;
 
     // todo add the filter where will display the cars ordered by type
     // todo add the filter where will display the cars by created day;
@@ -115,6 +118,20 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public void putTheCarToBasket(Long carId, String userEmail) {
+        Optional<Car> car = carRepository.findById(carId);
+        checker(car, carId);
+        Optional<User> user = userRepository.findByEmail(userEmail);
+        if(user.isEmpty()) {
+            throw new NotFoundException("User with email: " + userEmail, HttpStatus.NOT_FOUND);
+        }
+        List<User> enrolUser = car.get().getEnrolUsersToCars();
+        enrolUser.add(user.get());
+        car.get().setEnrolUsersToCars(enrolUser);
+        carRepository.save(car.get());
+    }
+
+    @Override
     public void updateById(Long id, CarRequest carRequest) {
         Optional<Car> car = carRepository.findById(id);
         checker(car, id);
@@ -170,4 +187,6 @@ public class CarServiceImpl implements CarService {
             throw new NotFoundException("Car with id: " + id + " not found", HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

@@ -27,7 +27,7 @@ public class StorageController {
                 .ok()
                 .contentLength(data.length)
                 .header("Content-type", "application/octet-stream")
-                .header("Content-dispositions", "attachment: filename=\"" + fileName + "\"")
+                .header("Content-disposition", "attachment: filename=\"" + fileName + "\"")
                 .body(resource);
     }
 
