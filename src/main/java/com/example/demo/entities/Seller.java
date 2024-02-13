@@ -33,5 +33,5 @@ public class Seller {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Car> car;
+    private List<Product> product;
 }

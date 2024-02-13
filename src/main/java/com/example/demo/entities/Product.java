@@ -5,13 +5,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Car {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +38,8 @@ public class Car {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "basket_tb",
-            joinColumns = @JoinColumn(name = "car", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_tb_email", referencedColumnName = "email")
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_email", referencedColumnName = "email")
     )
-    private List<User> enrolUsersToCars;
+    private List<User> enrolUsersToProducts;
 }

@@ -34,6 +34,6 @@ public class User {
     private Employee employee;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "enrolUsersToCars", cascade = CascadeType.ALL)
-    private List<Car> enrolCarsToUsers;
+    @ManyToMany(mappedBy = "enrolUsersToProducts", cascade = CascadeType.ALL)
+    private List<Product> enrolProductsToUsers;
 }
