@@ -19,5 +19,5 @@ public class Type {
     private String name;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)
-    private List<Car> car;
+    private List<Product> product;
 }
