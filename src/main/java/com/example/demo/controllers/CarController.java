@@ -54,6 +54,11 @@ public class CarController {
         return carService.findById(id);
     }
 
+    @PutMapping("/putTheCarToBasket/{carId}/user/{userEmail}")
+    public void putTheCarToBasket(@PathVariable Long carId, @PathVariable String userEmail) {
+        carService.putTheCarToBasket(carId, userEmail);
+    }
+
     @PutMapping("/updateById/{id}")
     public void updateById(@PathVariable Long id, @RequestBody CarRequest carRequest) {
         carService.updateById(id, carRequest);

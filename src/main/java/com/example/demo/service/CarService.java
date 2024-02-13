@@ -14,6 +14,7 @@ public interface CarService {
     List<String> compareWith(Long firstId, Long secondId);
     List<CarResponse> getSolvedCarsByType(String type);
     CarResponse findById(Long id);
+    void putTheCarToBasket(Long carId, String userEmail);
     void updateById(Long id, CarRequest carRequest);
     void deleteById(Long id);
     void create(CarRequest carRequest, String sellerEmail);
