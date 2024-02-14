@@ -8,7 +8,7 @@ import lombok.Setter;
 public class ProductResponse {
     private Long id;
     private String name;
-    private String type;
+    private String category;
     private String color;
     private int year;
     private String country;

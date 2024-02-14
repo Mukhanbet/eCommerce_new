@@ -10,9 +10,9 @@ public interface ProductService {
     List<ProductResponse> getAllAvailableProducts();
     List<ProductResponse> getSolvedProducts();
     List<ProductResponse> getProductsSortedByPrice(String order);
-    List<ProductResponse> getByType(String type);
+    List<ProductResponse> getByCategory(String category);
     List<String> compareWith(Long firstId, Long secondId);
-    List<ProductResponse> getSolvedProductsByType(String type);
+    List<ProductResponse> getSolvedProductsByCategory(String category);
     ProductResponse findById(Long id);
     void putTheProductToBasket(Long productId, String userEmail);
     void updateById(Long id, ProductRequest productRequest);
