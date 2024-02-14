@@ -69,8 +69,8 @@ public class ProductController {
         productService.deleteById(id);
     }
 
-    @PostMapping("/create/{sellerEmail}")
-    public void create(@RequestBody ProductRequest productRequest, @PathVariable String sellerEmail) {
-        productService.create(productRequest, sellerEmail);
+    @PostMapping("/create/{managerEmail}")
+    public void create(@RequestBody ProductRequest productRequest, @PathVariable String managerEmail) {
+        productService.create(productRequest, managerEmail);
     }
 }

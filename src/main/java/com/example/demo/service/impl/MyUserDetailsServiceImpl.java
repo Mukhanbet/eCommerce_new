@@ -4,14 +4,14 @@ import com.example.demo.dto.user.UserRequest;
 import com.example.demo.dto.user.UserResponse;
 import com.example.demo.entities.Admin;
 import com.example.demo.entities.Employee;
-import com.example.demo.entities.Seller;
+import com.example.demo.entities.Manager;
 import com.example.demo.entities.User;
 import com.example.demo.enums.Role;
 import com.example.demo.exception.BadCredentialsException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repositories.EmployeeRepository;
-import com.example.demo.repositories.SellerRepository;
+import com.example.demo.repositories.ManagerRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.MyUserDetailsService;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class MyUserDetailsServiceImpl implements MyUserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final SellerRepository sellerRepository;
+    private final ManagerRepository managerRepository;
     private final EmployeeRepository employeeRepository;
     @Override
     public List<UserResponse> getAll() {
@@ -53,15 +53,15 @@ public class MyUserDetailsServiceImpl implements MyUserDetailsService {
             Admin admin = user.get().getAdmin();
             user.get().setRole(Role.valueOf(userRequest.getRole()));
             user.get().setAdmin(admin);
-        } else if(userRequest.getRole().equals(String.valueOf(Role.SELLER))) {
-            Seller seller = user.get().getSeller();
+        } else if(userRequest.getRole().equals(String.valueOf(Role.MANAGER))) {
+            Manager manager = user.get().getManager();
             user.get().setRole(Role.valueOf(userRequest.getRole()));
-            seller.setEmail(userRequest.getEmail());
-            seller.setRole(Role.valueOf(userRequest.getRole()));
-            seller.setPassword(userRequest.getPassword());
-            user.get().setSeller(seller);
-            seller.setUser(user.get());
-            sellerRepository.save(seller);
+            manager.setEmail(userRequest.getEmail());
+            manager.setRole(Role.valueOf(userRequest.getRole()));
+            manager.setPassword(userRequest.getPassword());
+            user.get().setManager(manager);
+            manager.setUser(user.get());
+            managerRepository.save(manager);
         } else if(userRequest.getRole().equals(String.valueOf(Role.EMPLOYEE))) {
             Employee employee = user.get().getEmployee();
             user.get().setRole(Role.valueOf(userRequest.getRole()));
@@ -90,15 +90,15 @@ public class MyUserDetailsServiceImpl implements MyUserDetailsService {
             Admin admin = user.getAdmin();
             user.setRole(Role.valueOf(userRequest.getRole()));
             user.setAdmin(admin);
-        } else if(userRequest.getRole().equals(String.valueOf(Role.SELLER))) {
-            Seller seller = new Seller();
+        } else if(userRequest.getRole().equals(String.valueOf(Role.MANAGER))) {
+            Manager manager = new Manager();
             user.setRole(Role.valueOf(userRequest.getRole()));
-            seller.setEmail(userRequest.getEmail());
-            seller.setRole(Role.valueOf(userRequest.getRole()));
-            seller.setPassword(userRequest.getPassword());
-            seller.setUser(user);
-            user.setSeller(seller);
-            sellerRepository.save(seller);
+            manager.setEmail(userRequest.getEmail());
+            manager.setRole(Role.valueOf(userRequest.getRole()));
+            manager.setPassword(userRequest.getPassword());
+            manager.setUser(user);
+            user.setManager(manager);
+            managerRepository.save(manager);
         } else if(userRequest.getRole().equals(String.valueOf(Role.EMPLOYEE))) {
             Employee employee = new Employee();
             user.setRole(Role.valueOf(userRequest.getRole()));

@@ -32,7 +32,7 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "email")
-    private Seller seller;
+    private Manager manager;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
