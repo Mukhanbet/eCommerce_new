@@ -28,7 +28,7 @@ public class User {
     private Admin admin;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Seller seller;
+    private Manager manager;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Employee employee;

@@ -20,7 +20,7 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.setYear(product.getYear());
         productResponse.setCountry(product.getCountry());
         productResponse.setPrice(product.getPrice());
-        productResponse.setOwner(product.getSeller().getName());
+        productResponse.setOwner(product.getManager().getName());
         productResponse.setAvailable(product.isAvailable());
         productResponse.setAmount(product.getAmount());
         return productResponse;

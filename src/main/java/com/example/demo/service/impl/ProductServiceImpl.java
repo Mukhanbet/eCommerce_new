@@ -3,13 +3,13 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.product.ProductRequest;
 import com.example.demo.dto.product.ProductResponse;
 import com.example.demo.entities.Product;
-import com.example.demo.entities.Seller;
+import com.example.demo.entities.Manager;
 import com.example.demo.entities.Type;
 import com.example.demo.entities.User;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.ProductMapper;
 import com.example.demo.repositories.ProductRepository;
-import com.example.demo.repositories.SellerRepository;
+import com.example.demo.repositories.ManagerRepository;
 import com.example.demo.repositories.TypeRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.ProductService;
@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final TypeRepository typeRepository;
-    private final SellerRepository sellerRepository;
+    private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
 
     // todo add the code which will subtract the amount of product when the person will buy it or put the basket
@@ -158,7 +158,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void create(ProductRequest productRequest, String sellerEmail) {
+    public void create(ProductRequest productRequest, String managerEmail) {
         Product product = new Product();
         product.setName(productRequest.getName());
         product.setColor(productRequest.getColor());
@@ -173,11 +173,11 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setType(type.get());
 
-        Optional<Seller> seller = sellerRepository.findByEmail(sellerEmail);
-        if(seller.isEmpty()) {
-            throw new NotFoundException("Seller with email: " + sellerEmail + " not found", HttpStatus.NOT_FOUND);
+        Optional<Manager> manager = managerRepository.findByEmail(managerEmail);
+        if(manager.isEmpty()) {
+            throw new NotFoundException("Manager with email: " + managerEmail + " not found", HttpStatus.NOT_FOUND);
         }
-        product.setSeller(seller.get());
+        product.setManager(manager.get());
         productRepository.save(product);
     }
 

@@ -17,5 +17,5 @@ public interface ProductService {
     void putTheProductToBasket(Long productId, String userEmail);
     void updateById(Long id, ProductRequest productRequest);
     void deleteById(Long id);
-    void create(ProductRequest productRequest, String sellerEmail);
+    void create(ProductRequest productRequest, String managerEmail);
 }
