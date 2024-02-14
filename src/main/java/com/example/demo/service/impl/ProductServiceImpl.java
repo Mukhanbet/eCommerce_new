@@ -4,13 +4,13 @@ import com.example.demo.dto.product.ProductRequest;
 import com.example.demo.dto.product.ProductResponse;
 import com.example.demo.entities.Product;
 import com.example.demo.entities.Manager;
-import com.example.demo.entities.Type;
+import com.example.demo.entities.Category;
 import com.example.demo.entities.User;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.ProductMapper;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.repositories.ManagerRepository;
-import com.example.demo.repositories.TypeRepository;
+import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.*;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final TypeRepository typeRepository;
+    private final CategoryRepository categoryRepository;
     private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
 
@@ -73,10 +73,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getByType(String type) {
+    public List<ProductResponse> getByCategory(String category) {
         List<Product> Products = new ArrayList<>();
         for(Product product : productRepository.findAll()) {
-            if(product.getType().getName().equals(type.toUpperCase()) && product.isAvailable()) {
+            if(product.getCategory().getName().equals(category.toUpperCase()) && product.isAvailable()) {
                 Products.add(product);
             }
         }
@@ -85,28 +85,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<String> compareWith(Long firstId, Long secondId) {
-        Optional<Product> firstproduct = productRepository.findById(firstId);
-        checker(firstproduct, firstId);
-        Optional<Product> secondproduct = productRepository.findById(secondId);
-        checker(secondproduct, secondId);
+        Optional<Product> firstProduct = productRepository.findById(firstId);
+        checker(firstProduct, firstId);
+        Optional<Product> secondProduct = productRepository.findById(secondId);
+        checker(secondProduct, secondId);
         List<String> difference = new ArrayList<>();
-        difference.add("Name:    " + firstproduct.get().getName() + "     " + secondproduct.get().getName());
-        difference.add("Color:   " + firstproduct.get().getColor() + "    " + secondproduct.get().getColor());
-        difference.add("Year:     " + firstproduct.get().getYear() + "     " + secondproduct.get().getYear());
-        difference.add("Country:  " + firstproduct.get().getCountry() + "  " + secondproduct.get().getCountry());
-        difference.add("Price:    " + firstproduct.get().getPrice() + "    " + secondproduct.get().getPrice());
+        difference.add("Name:    " + firstProduct.get().getName() + "     " + secondProduct.get().getName());
+        difference.add("Color:   " + firstProduct.get().getColor() + "    " + secondProduct.get().getColor());
+        difference.add("Year:     " + firstProduct.get().getYear() + "     " + secondProduct.get().getYear());
+        difference.add("Country:  " + firstProduct.get().getCountry() + "  " + secondProduct.get().getCountry());
+        difference.add("Price:    " + firstProduct.get().getPrice() + "    " + secondProduct.get().getPrice());
         return difference;
     }
 
     @Override
-    public List<ProductResponse> getSolvedProductsByType(String type) {
-        List<Product> solvedproductsSameType = new ArrayList<>();
+    public List<ProductResponse> getSolvedProductsByCategory(String category) {
+        List<Product> solvedProductsSameCategory = new ArrayList<>();
         for(Product product : productRepository.findAll()) {
-            if(product.getType().getName().equals(type.toUpperCase()) && !product.isAvailable()) {
-                solvedproductsSameType.add(product);
+            if(product.getCategory().getName().equals(category.toUpperCase()) && !product.isAvailable()) {
+                solvedProductsSameCategory.add(product);
             }
         }
-        return productMapper.toDtoS(solvedproductsSameType);
+        return productMapper.toDtoS(solvedProductsSameCategory);
     }
 
     @Override
@@ -142,11 +142,11 @@ public class ProductServiceImpl implements ProductService {
         product.get().setAvailable(productRequest.isAvailable());
         product.get().setAmount(productRequest.getAmount());
 
-        Optional<Type> type = typeRepository.findByName(productRequest.getType().toUpperCase());
-        if(type.isEmpty()) {
-            throw new NotFoundException("In the system this type: " + productRequest.getType() + " doesn't exist", HttpStatus.NOT_FOUND);
+        Optional<Category> category = categoryRepository.findByName(productRequest.getCategory().toUpperCase());
+        if(category.isEmpty()) {
+            throw new NotFoundException("In the system this category: " + productRequest.getCategory() + " doesn't exist", HttpStatus.NOT_FOUND);
         }
-        product.get().setType(type.get());
+        product.get().setCategory(category.get());
         productRepository.save(product.get());
     }
 
@@ -167,11 +167,11 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productRequest.getPrice());
         product.setAvailable(productRequest.isAvailable());
         product.setAmount(productRequest.getAmount());
-        Optional<Type> type = typeRepository.findByName(productRequest.getType().toUpperCase());
-        if(type.isEmpty()) {
-            throw new NotFoundException("In the system this type: " + productRequest.getType() + " doesn't exist", HttpStatus.NOT_FOUND);
+        Optional<Category> category = categoryRepository.findByName(productRequest.getCategory().toUpperCase());
+        if(category.isEmpty()) {
+            throw new NotFoundException("In the system this category: " + productRequest.getCategory() + " doesn't exist", HttpStatus.NOT_FOUND);
         }
-        product.setType(type.get());
+        product.setCategory(category.get());
 
         Optional<Manager> manager = managerRepository.findByEmail(managerEmail);
         if(manager.isEmpty()) {

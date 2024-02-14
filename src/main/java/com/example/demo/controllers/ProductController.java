@@ -34,9 +34,9 @@ public class ProductController {
         return productService.getProductsSortedByPrice(order);
     }
 
-    @GetMapping("/getByType/{type}")
-    public List<ProductResponse> getByType(@PathVariable String type) {
-        return productService.getByType(type);
+    @GetMapping("/getByCategory/{category}")
+    public List<ProductResponse> getByCategory(@PathVariable String category) {
+        return productService.getByCategory(category);
     }
 
     @GetMapping("/compareWith/{firstId}/{secondId}")
@@ -44,9 +44,9 @@ public class ProductController {
         return productService.compareWith(firstId, secondId);
     }
 
-    @GetMapping("/getSolvedProductByType/{type}")
-    public List<ProductResponse> getSolvedProductsByType(@PathVariable String type) {
-        return productService.getSolvedProductsByType(type);
+    @GetMapping("/getSolvedProductByCategory/{category}")
+    public List<ProductResponse> getSolvedProductsByCategory(@PathVariable String category) {
+        return productService.getSolvedProductsByCategory(category);
     }
 
     @GetMapping("/findById/{id}")

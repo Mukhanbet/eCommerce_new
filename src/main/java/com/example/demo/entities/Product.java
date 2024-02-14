@@ -17,18 +17,19 @@ public class Product {
     private Long id;
 
     private String name;
+    private String description;
+    private double price;
+    private int amount;
     private String color;
     private int year;
     private String country;
-    private double price;
     private boolean available;
-    private int amount;
 
     // todo add here the phone number of Seller!
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "name")
-    private Type type;
+    private Category category;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "email")

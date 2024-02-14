@@ -1,10 +1,10 @@
-package com.example.demo.dto.type;
+package com.example.demo.dto.category;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class TypeRequest {
+public class CategoryRequest {
     private String name;
 }
