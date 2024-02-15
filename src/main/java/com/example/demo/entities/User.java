@@ -32,8 +32,4 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Employee employee;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "enrolUsersToProducts", cascade = CascadeType.ALL)
-    private List<Product> enrolProductsToUsers;
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -20,10 +21,10 @@ public class Product {
     private String description;
     private double price;
     private int amount;
+    private String size;
     private String color;
-    private int year;
-    private String country;
     private boolean available;
+    private LocalDate addedDate;
 
     // todo add here the phone number of Seller!
 
@@ -32,15 +33,6 @@ public class Product {
     private Category category;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "email")
-    private Manager manager;
-
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "basket_tb",
-            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_email", referencedColumnName = "email")
-    )
-    private List<User> enrolUsersToProducts;
+    @JoinColumn(referencedColumnName = "name")
+    private Brand brand;
 }

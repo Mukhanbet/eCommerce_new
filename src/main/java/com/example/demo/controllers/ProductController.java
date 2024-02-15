@@ -54,11 +54,6 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    @PutMapping("/putTheProductToBasket/{productId}/user/{userEmail}")
-    public void putTheProductToBasket(@PathVariable Long productId, @PathVariable String userEmail) {
-        productService.putTheProductToBasket(productId, userEmail);
-    }
-
     @PutMapping("/updateById/{id}")
     public void updateById(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         productService.updateById(id, productRequest);
@@ -69,8 +64,8 @@ public class ProductController {
         productService.deleteById(id);
     }
 
-    @PostMapping("/create/{managerEmail}")
-    public void create(@RequestBody ProductRequest productRequest, @PathVariable String managerEmail) {
-        productService.create(productRequest, managerEmail);
+    @PostMapping("/create")
+    public void create(@RequestBody ProductRequest productRequest) {
+        productService.create(productRequest);
     }
 }
