@@ -15,14 +15,14 @@ public class ProductMapperImpl implements ProductMapper {
         ProductResponse productResponse = new ProductResponse();
         productResponse.setId(product.getId());
         productResponse.setName(product.getName());
-        productResponse.setCategory(product.getCategory().getName());
-        productResponse.setColor(product.getColor());
-        productResponse.setYear(product.getYear());
-        productResponse.setCountry(product.getCountry());
+        productResponse.setDescription(product.getDescription());
         productResponse.setPrice(product.getPrice());
-        productResponse.setOwner(product.getManager().getName());
-        productResponse.setAvailable(product.isAvailable());
         productResponse.setAmount(product.getAmount());
+        productResponse.setCategory(product.getCategory().getName());
+        productResponse.setBrand(product.getBrand().getName());
+        productResponse.setSize(product.getSize());
+        productResponse.setColor(product.getColor());
+        productResponse.setAvailable(product.isAvailable());
         return productResponse;
     }
 

@@ -31,7 +31,4 @@ public class Manager {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "system", referencedColumnName = "id")
     private User user;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Product> product;
 }

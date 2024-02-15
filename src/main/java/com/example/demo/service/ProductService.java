@@ -14,8 +14,7 @@ public interface ProductService {
     List<String> compareWith(Long firstId, Long secondId);
     List<ProductResponse> getSolvedProductsByCategory(String category);
     ProductResponse findById(Long id);
-    void putTheProductToBasket(Long productId, String userEmail);
     void updateById(Long id, ProductRequest productRequest);
     void deleteById(Long id);
-    void create(ProductRequest productRequest, String managerEmail);
+    void create(ProductRequest productRequest);
 }
