@@ -68,13 +68,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getByCategory(String category) {
-        List<Product> Products = new ArrayList<>();
+        List<Product> sortedProductsByCategory = new ArrayList<>();
         for(Product product : productRepository.findAll()) {
             if(product.getCategory().getName().equals(category.toUpperCase()) && product.isAvailable()) {
-                Products.add(product);
+                sortedProductsByCategory.add(product);
             }
         }
-        return productMapper.toDtoS(Products);
+        return productMapper.toDtoS(sortedProductsByCategory);
+    }
+
+    @Override
+    public List<ProductResponse> getByBrand(String brand) {
+        List<Product> sortedProductByBrand = new ArrayList<>();
+        for(Product product : productRepository.findAll()) {
+            if(product.getBrand().getName().equalsIgnoreCase(brand.toUpperCase()) && product.isAvailable()) {
+                sortedProductByBrand.add(product);
+            }
+        }
+        return productMapper.toDtoS(sortedProductByBrand);
     }
 
     @Override

@@ -36,4 +36,7 @@ public class Product {
 
     @OneToMany(mappedBy = "enrolProduct")
     private List<Basket> baskets;
+
+    @OneToMany(mappedBy = "enrolProductToOrder")
+    private List<Order> orders;
 }

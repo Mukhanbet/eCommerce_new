@@ -35,4 +35,7 @@ public class User {
 
     @OneToMany(mappedBy = "enrolUser")
     private List<Basket> baskets;
+
+    @OneToMany(mappedBy = "enrolUserToOrder")
+    private List<Order> orders;
 }
