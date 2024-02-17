@@ -112,7 +112,6 @@ public class BasketServiceImpl implements BasketService {
                 basketRepository.deleteById(basket.getId());
             }
         }
-        System.out.println("Scheduled is working!");
     }
 
     private void checker(Optional<Basket> basket, Long id) {

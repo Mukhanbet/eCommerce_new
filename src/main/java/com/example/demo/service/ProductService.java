@@ -11,6 +11,7 @@ public interface ProductService {
     List<ProductResponse> getSolvedProducts();
     List<ProductResponse> getProductsSortedByPrice(String order);
     List<ProductResponse> getByCategory(String category);
+    List<ProductResponse> getByBrand(String brand);
     List<String> compareWith(Long firstId, Long secondId);
     List<ProductResponse> getSolvedProductsByCategory(String category);
     ProductResponse findById(Long id);
