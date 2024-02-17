@@ -16,4 +16,5 @@ public class ProductResponse {
     private String size;
     private String color;
     private boolean available;
+    private double rating;
 }

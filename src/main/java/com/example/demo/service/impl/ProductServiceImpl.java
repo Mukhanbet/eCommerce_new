@@ -52,18 +52,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getProductsSortedByPrice(String order) {
-        List<Product> productsByKillingPrice = new ArrayList<>();
+        List<Product> productsBySortedPrice = new ArrayList<>();
         for(Product product : productRepository.findAll()) {
             if(product.isAvailable()) {
-                productsByKillingPrice.add(product);
+                productsBySortedPrice.add(product);
             }
         }
         if(order.equalsIgnoreCase("increasing")) {
-            Collections.sort(productsByKillingPrice, (product1, product2) -> Double.compare(product2.getPrice(), product1.getPrice()));
+            Collections.sort(productsBySortedPrice, (product1, product2) -> Double.compare(product2.getPrice(), product1.getPrice()));
         } else if (order.equalsIgnoreCase("killing")) {
-            Collections.sort(productsByKillingPrice, Comparator.comparingDouble(Product::getPrice));
+            Collections.sort(productsBySortedPrice, Comparator.comparingDouble(Product::getPrice));
         }
-        return productMapper.toDtoS(productsByKillingPrice);
+        return productMapper.toDtoS(productsBySortedPrice);
+    }
+
+    @Override
+    public List<ProductResponse> getPopularProducts() {
+        List<Product> sortedProducts = new ArrayList<>();
+        for(Product product : productRepository.findAll()) {
+            if(product.isAvailable()) {
+                sortedProducts.add(product);
+            }
+        }
+        Collections.sort(sortedProducts,  (product1, product2) -> Double.compare(product2.getRating(), product1.getRating()));
+        return productMapper.toDtoS(sortedProducts);
     }
 
     @Override
@@ -178,6 +190,4 @@ public class ProductServiceImpl implements ProductService {
             throw new NotFoundException("product with id: " + id + " not found", HttpStatus.NOT_FOUND);
         }
     }
-
-
 }

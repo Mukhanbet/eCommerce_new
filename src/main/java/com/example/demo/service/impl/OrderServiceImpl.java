@@ -131,6 +131,8 @@ public class OrderServiceImpl implements OrderService {
         if(orderRequest.getAmount() > product.get().getAmount()) {
             throw new BadCredentialsException("The amount of product exceeds than available");
         }
+        int newAmount = product.get().getAmount() - orderRequest.getAmount();
+        product.get().setAmount(newAmount);
         Order order = new Order();
         order.setAmount(orderRequest.getAmount());
         order.setAddress(orderRequest.getAddress());
@@ -142,6 +144,7 @@ public class OrderServiceImpl implements OrderService {
         order.setEnrolUserToOrder(user.get());
         order.setEnrolProductToOrder(product.get());
         orderRepository.save(order);
+        productRepository.save(product.get());
     }
 
     private void checker(Optional<Order> order, Long id) {

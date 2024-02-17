@@ -34,6 +34,11 @@ public class ProductController {
         return productService.getProductsSortedByPrice(order);
     }
 
+    @GetMapping("/getPopularProducts")
+    public List<ProductResponse> getPopularProducts() {
+        return productService.getPopularProducts();
+    }
+
     @GetMapping("/getByCategory/{category}")
     public List<ProductResponse> getByCategory(@PathVariable String category) {
         return productService.getByCategory(category);

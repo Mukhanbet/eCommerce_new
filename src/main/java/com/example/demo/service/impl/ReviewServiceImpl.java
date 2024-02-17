@@ -70,6 +70,11 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         Review review = new Review();
+        for(Review review1 : reviewRepository.findAll()) {
+            if(review1.getEnrolUserToReview().getEmail().equals(userEmail) && review1.getEnrolProductToReview().getId().equals(productId)) {
+                review = review1;
+            }
+        }
         review.setReviewText(reviewRequest.getReviewText());
         review.setStar(reviewRequest.getStar());
         review.setReviewDate(LocalDate.now());

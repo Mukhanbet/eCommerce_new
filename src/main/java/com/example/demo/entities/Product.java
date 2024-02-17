@@ -25,6 +25,18 @@ public class Product {
     private String color;
     private boolean available;
     private LocalDate addedDate;
+    @Transient
+    private double rating;
+
+    public double getRating() {
+        if(reviews == null || reviews.isEmpty()) {
+            return 0.0;
+        }
+        double sumStars = reviews.stream()
+                .mapToDouble(Review::getStar)
+                .sum();
+        return sumStars/reviews.size();
+    }
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "name")

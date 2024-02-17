@@ -23,6 +23,7 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.setSize(product.getSize());
         productResponse.setColor(product.getColor());
         productResponse.setAvailable(product.isAvailable());
+        productResponse.setRating(product.getRating());
         return productResponse;
     }
 
