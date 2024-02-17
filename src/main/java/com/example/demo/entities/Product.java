@@ -26,8 +26,6 @@ public class Product {
     private boolean available;
     private LocalDate addedDate;
 
-    // todo add here the phone number of Seller!
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "name")
     private Category category;
@@ -35,4 +33,7 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "name")
     private Brand brand;
+
+    @OneToMany(mappedBy = "enrolProduct")
+    private List<Basket> baskets;
 }

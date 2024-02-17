@@ -6,6 +6,7 @@ import com.example.demo.entities.Basket;
 import com.example.demo.entities.Product;
 import com.example.demo.entities.User;
 import com.example.demo.enums.Status;
+import com.example.demo.exception.BadCredentialsException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.BasketMapper;
 import com.example.demo.repositories.BasketRepository;
@@ -14,6 +15,7 @@ import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.BasketService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -62,11 +64,14 @@ public class BasketServiceImpl implements BasketService {
     public void deleteById(Long id) {
         Optional<Basket> basket = basketRepository.findById(id);
         checker(basket, id);
+        Product product = basket.get().getEnrolProduct();
+        int newAmount = product.getAmount() + basket.get().getAmount();
+        product.setAmount(newAmount); // todo is this correct?
         basketRepository.deleteById(id);
     }
 
     @Override
-    public void putProductToBasket(Long productId, String userEmail) {
+    public void putProductToBasket(Long productId, String userEmail, BasketRequest basketRequest) {
         Basket basket = new Basket();
         Optional<Product> product = productRepository.findById(productId);
         if(product.isEmpty()) {
@@ -76,14 +81,38 @@ public class BasketServiceImpl implements BasketService {
         if(user.isEmpty()) {
             throw new NotFoundException("User with email \"" + userEmail + "\" not found", HttpStatus.NOT_FOUND);
         }
+        if(basketRequest.getAmount() > product.get().getAmount()) {
+            throw new BadCredentialsException("The amount of product exceeds than available");
+        }
+        basket.setAmount(basketRequest.getAmount());
+        int newAmount = product.get().getAmount() - basketRequest.getAmount();
+        product.get().setAmount(newAmount);
         basket.setTotalSum(product.get().getPrice());
         basket.setCreatedDay(LocalDate.now());
+//        basket.setEndDay(LocalDate.now().plusDays(7));
+        basket.setEndDay(LocalDate.now().minusDays(1));
         basket.setStatus(Status.ACTIVE);
         basket.setDelivery("What is ");
         basket.setPayment("cash");
         basket.setEnrolProduct(product.get());
         basket.setEnrolUser(user.get());
         basketRepository.save(basket);
+        productRepository.save(product.get());
+    }
+
+    @Override
+    @Scheduled(fixedRate = 5000)
+    public void systemUpdates() {
+        List<Basket> baskets = basketRepository.findAll();
+        for(Basket basket : baskets) {
+            if(basket.getEndDay().isBefore(LocalDate.now())) {
+                Product product = basket.getEnrolProduct();
+                product.setAmount(product.getAmount() + basket.getAmount());
+                productRepository.save(product);
+                basketRepository.deleteById(basket.getId());
+            }
+        }
+        System.out.println("Scheduled is working!");
     }
 
     private void checker(Optional<Basket> basket, Long id) {

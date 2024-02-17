@@ -19,17 +19,18 @@ public class Basket {
 
     private double totalSum;
     private LocalDate createdDay;
+    private LocalDate endDay;
     @Enumerated(EnumType.STRING)
     private Status status;
     private String delivery;
     private String payment;
+    private int amount;
 
     @ManyToOne
     @JoinColumn(name = "user_email", referencedColumnName = "email")
     private User enrolUser;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product enrolProduct;
-    // todo it doesn't shown in table!!!
 }

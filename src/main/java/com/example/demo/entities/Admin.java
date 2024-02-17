@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @Setter
 public class Admin {
 
-    //some changes
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
