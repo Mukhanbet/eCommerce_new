@@ -10,6 +10,7 @@ public interface ProductService {
     List<ProductResponse> getAllAvailableProducts();
     List<ProductResponse> getSolvedProducts();
     List<ProductResponse> getProductsSortedByPrice(String order);
+    List<ProductResponse> getPopularProducts();
     List<ProductResponse> getByCategory(String category);
     List<ProductResponse> getByBrand(String brand);
     List<String> compareWith(Long firstId, Long secondId);
