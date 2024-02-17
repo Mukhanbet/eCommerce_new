@@ -39,4 +39,7 @@ public class Product {
 
     @OneToMany(mappedBy = "enrolProductToOrder")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "enrolProductToReview")
+    private List<Review> reviews;
 }

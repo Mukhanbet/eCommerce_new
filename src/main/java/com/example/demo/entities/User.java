@@ -38,4 +38,7 @@ public class User {
 
     @OneToMany(mappedBy = "enrolUserToOrder")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "enrolUserToReview")
+    private List<Review> review;
 }
