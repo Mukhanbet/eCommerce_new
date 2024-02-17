@@ -8,9 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class BasketRequest {
-    private double totalSum;
-    private LocalDate createdDay;
-    private String status;
     private String delivery;
     private String payment;
+    private int amount;
 }

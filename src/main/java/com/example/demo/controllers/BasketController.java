@@ -40,7 +40,12 @@ public class BasketController {
     }
 
     @PostMapping("/putProductToBasket/{productId}/user/{userEmail}")
-    public void putProductToBasket(@PathVariable Long productId, @PathVariable String userEmail) {
-        basketService.putProductToBasket(productId, userEmail);
+    public void putProductToBasket(@PathVariable Long productId, @PathVariable String userEmail, @RequestBody BasketRequest basketRequest) {
+        basketService.putProductToBasket(productId, userEmail, basketRequest);
+    }
+
+    @PutMapping("/systemUpdates")
+    public void systemUpdates() {
+        basketService.systemUpdates();
     }
 }

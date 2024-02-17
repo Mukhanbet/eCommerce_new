@@ -11,5 +11,6 @@ public interface BasketService {
     BasketResponse findById(Long id);
     void updateById(Long id, BasketRequest basketRequest);
     void deleteById(Long id);
-    void putProductToBasket(Long productId, String userEmail);
+    void putProductToBasket(Long productId, String userEmail, BasketRequest basketRequest);
+    void systemUpdates();
 }
