@@ -14,9 +14,12 @@ import com.example.demo.service.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -48,6 +51,19 @@ public class ReviewServiceImpl implements ReviewService {
         review.get().setReviewDate(LocalDate.now());
         // todo add here user and product
         return null;
+    }
+
+    @Override
+    public ReviewResponse updateByFields(Long id, Map<String, Object> fields) { // todo is it good idea to add this endpoint?
+        Optional<Review> existingReview = reviewRepository.findById(id);
+        checker(existingReview, id);
+        fields.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(Review.class, key);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, existingReview.get(), value);
+        });
+        reviewRepository.save(existingReview.get());
+        return reviewMapper.toDto(existingReview.get());
     }
 
     @Override

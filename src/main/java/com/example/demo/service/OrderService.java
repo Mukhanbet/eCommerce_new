@@ -5,6 +5,7 @@ import com.example.demo.dto.order.OrderResponse;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     List<OrderResponse> getAll();
@@ -15,6 +16,7 @@ public interface OrderService {
     List<OrderResponse> getOrdersByProduct(Long productId);
     OrderResponse findById(Long id);
     void updateById(OrderRequest orderRequest, Long id);
+    void updateByField(Long id, Map<String, Object> fields);
     void deleteById(Long id);
     void orderOperation(String userEmail, Long productId, OrderRequest orderRequest);
 }
