@@ -16,11 +16,13 @@ import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -102,17 +104,50 @@ public class OrderServiceImpl implements OrderService {
     public void updateById(OrderRequest orderRequest, Long id) {
         Optional<Order> order = orderRepository.findById(id);
         checker(order, id);
+        if(order.get().getEnrolProductToOrder().getAmount() + order.get().getAmount() < orderRequest.getAmount()) {
+            throw new BadCredentialsException("The amount of product exceeds than available");
+        }
+        if(!order.get().getStatus().equals(Status.ACTIVE)) {
+            throw new BadCredentialsException("You can't update the order at the moment!");
+        }
+        int newQuantityInSystem = order.get().getEnrolProductToOrder().getAmount() + order.get().getAmount() - orderRequest.getAmount();
         order.get().setAmount(orderRequest.getAmount());
         order.get().setAddress(orderRequest.getAddress());
         order.get().setPayment(Payment.valueOf(orderRequest.getPayment()));
-        // todo here we have to add sum function
+        double newSum = orderRequest.getAmount() * order.get().getEnrolProductToOrder().getPrice();
+        order.get().setSum(newSum);
+
+        Product product = order.get().getEnrolProductToOrder();
+        product.setAmount(newQuantityInSystem);
+        order.get().setEnrolProductToOrder(product);
+        productRepository.save(product);
         orderRepository.save(order.get());
+    }
+
+    @Override
+    public void updateByField(Long id, Map<String, Object> fields) {
+        Optional<Order> order = orderRepository.findById(id);
+        checker(order, id);
+        fields.forEach((key, value) -> {
+//            Field field = ReflectionUtils.findField(Order.class, key);
+//            field.setAccessible(true);
+//            ReflectionUtils.setField(field, order, value);
+            if(key.equals("status")) {
+                order.get().setStatus(Status.valueOf((String) value));
+            }
+        });
+        orderRepository.save(order.get());
+        // todo here we have to check again which fields will updated
     }
 
     @Override
     public void deleteById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         checker(order, id);
+        Product product = order.get().getEnrolProductToOrder();
+        int newQuantityInSystem = order.get().getAmount() + product.getAmount();
+        product.setAmount(newQuantityInSystem);
+        productRepository.save(product);
         orderRepository.deleteById(id);
     }
 
@@ -131,8 +166,8 @@ public class OrderServiceImpl implements OrderService {
         if(orderRequest.getAmount() > product.get().getAmount()) {
             throw new BadCredentialsException("The amount of product exceeds than available");
         }
-        int newAmount = product.get().getAmount() - orderRequest.getAmount();
-        product.get().setAmount(newAmount);
+        int newQuantityInSystem = product.get().getAmount() - orderRequest.getAmount();
+        product.get().setAmount(newQuantityInSystem);
         Order order = new Order();
         order.setAmount(orderRequest.getAmount());
         order.setAddress(orderRequest.getAddress());
@@ -145,6 +180,18 @@ public class OrderServiceImpl implements OrderService {
         order.setEnrolProductToOrder(product.get());
         orderRepository.save(order);
         productRepository.save(product.get());
+    }
+
+    @Scheduled(fixedRate = 100000)
+    public void systemUpdates() {
+        for(Order order : orderRepository.findAll()) {
+            if(order.getStatus().equals(Status.RETURNED)) {
+                Product product = order.getEnrolProductToOrder();
+                int newQuantityInSystem = product.getAmount() + order.getAmount();
+                product.setAmount(newQuantityInSystem);
+                productRepository.save(product);
+            }
+        }
     }
 
     private void checker(Optional<Order> order, Long id) {

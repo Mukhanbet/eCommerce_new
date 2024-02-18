@@ -19,9 +19,6 @@ public class BasketMapperImpl implements BasketMapper {
         basketResponse.setTotalSum(basket.getTotalSum());
         basketResponse.setCreatedDay(basket.getCreatedDay());
         basketResponse.setEndDay(basket.getEndDay());
-        basketResponse.setStatus(String.valueOf(basket.getStatus()));
-        basketResponse.setDelivery(basket.getDelivery());
-        basketResponse.setPayment(basket.getPayment());
         basketResponse.setAmount(basket.getAmount());
         return basketResponse;
     }

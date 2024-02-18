@@ -21,7 +21,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    // todo save the name of category in the upper case;
     @Override
     public List<CategoryResponse> getAll() {
         return categoryMapper.toDtoS(categoryRepository.findAll());

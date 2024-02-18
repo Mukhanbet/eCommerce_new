@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -53,6 +54,11 @@ public class OrderController {
     @PutMapping("/updateById/{id}")
     public void updateById(@RequestBody OrderRequest orderRequest, @PathVariable Long id) {
         orderService.updateById(orderRequest, id);
+    }
+
+    @PatchMapping("/updateByField/{id}")
+    public void updateByField(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+        orderService.updateByField(id, fields);
     }
 
     @DeleteMapping("/deleteById/{id}")

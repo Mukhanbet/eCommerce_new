@@ -36,17 +36,6 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public List<BasketResponse> getByStatus(String status) {
-        List<Basket> basketDividedByStatus = new ArrayList<>();
-        for(Basket basket : basketRepository.findAll()) {
-            if(status.equalsIgnoreCase(String.valueOf(basket.getStatus()))) {
-                basketDividedByStatus.add(basket);
-            }
-        }
-        return basketMapper.toDtoS(basketDividedByStatus);
-    }
-
-    @Override
     public BasketResponse findById(Long id) {
         Optional<Basket> basket = basketRepository.findById(id);
         checker(basket, id);
@@ -57,7 +46,19 @@ public class BasketServiceImpl implements BasketService {
     public void updateById(Long id, BasketRequest basketRequest) {
         Optional<Basket> basket = basketRepository.findById(id);
         checker(basket, id);
-        // todo what users can update in basket
+        if(basket.get().getEnrolProduct().getAmount() + basket.get().getAmount() < basketRequest.getAmount()) {
+            throw new BadCredentialsException("The amount (" + basketRequest.getAmount() + ") of product exceeds than available");
+        }
+        int newQuantityInSystem = basket.get().getEnrolProduct().getAmount() + basket.get().getAmount() - basketRequest.getAmount();
+        basket.get().setAmount(basketRequest.getAmount());
+        double newSum = basket.get().getEnrolProduct().getPrice() * basketRequest.getAmount();
+        basket.get().setTotalSum(newSum);
+
+        Product product = basket.get().getEnrolProduct();
+        product.setAmount(newQuantityInSystem);
+        basket.get().setEnrolProduct(product);
+        productRepository.save(product);
+        basketRepository.save(basket.get());
     }
 
     @Override
@@ -65,8 +66,9 @@ public class BasketServiceImpl implements BasketService {
         Optional<Basket> basket = basketRepository.findById(id);
         checker(basket, id);
         Product product = basket.get().getEnrolProduct();
-        int newAmount = product.getAmount() + basket.get().getAmount();
-        product.setAmount(newAmount); // todo is this correct?
+        int newQuantityInSystem = product.getAmount() + basket.get().getAmount();
+        product.setAmount(newQuantityInSystem); // todo is this correct?
+        productRepository.save(product);
         basketRepository.deleteById(id);
     }
 
@@ -85,23 +87,20 @@ public class BasketServiceImpl implements BasketService {
             throw new BadCredentialsException("The amount of product exceeds than available");
         }
         basket.setAmount(basketRequest.getAmount());
-        int newAmount = product.get().getAmount() - basketRequest.getAmount();
-        product.get().setAmount(newAmount);
-        basket.setTotalSum(product.get().getPrice());
+        int newQuantityInSystem = product.get().getAmount() - basketRequest.getAmount();
+        product.get().setAmount(newQuantityInSystem);
+        double totalSum = product.get().getPrice() * basketRequest.getAmount();
+        basket.setTotalSum(totalSum);
         basket.setCreatedDay(LocalDate.now());
 //        basket.setEndDay(LocalDate.now().plusDays(7));
         basket.setEndDay(LocalDate.now().minusDays(1));
-        basket.setStatus(Status.ACTIVE);
-        basket.setDelivery("What is ");
-        basket.setPayment("cash");
         basket.setEnrolProduct(product.get());
         basket.setEnrolUser(user.get());
         basketRepository.save(basket);
         productRepository.save(product.get());
     }
 
-    @Override
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 100000)
     public void systemUpdates() {
         List<Basket> baskets = basketRepository.findAll();
         for(Basket basket : baskets) {

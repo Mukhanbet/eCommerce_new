@@ -15,8 +15,5 @@ public class BasketResponse {
     private double totalSum;
     private LocalDate createdDay;
     private LocalDate endDay;
-    private String status;
-    private String delivery;
-    private String payment;
     private int amount;
 }

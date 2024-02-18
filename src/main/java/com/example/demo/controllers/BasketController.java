@@ -19,11 +19,6 @@ public class BasketController {
         return basketService.getAll();
     }
 
-    @GetMapping("/getByStatus/{status}")
-    public List<BasketResponse> getByStatus(@PathVariable String status) {
-        return basketService.getByStatus(status);
-    }
-
     @GetMapping("/findById/{id}")
     public BasketResponse findById(@PathVariable Long id) {
         return basketService.findById(id);
@@ -42,10 +37,5 @@ public class BasketController {
     @PostMapping("/putProductToBasket/{productId}/user/{userEmail}")
     public void putProductToBasket(@PathVariable Long productId, @PathVariable String userEmail, @RequestBody BasketRequest basketRequest) {
         basketService.putProductToBasket(productId, userEmail, basketRequest);
-    }
-
-    @PutMapping("/systemUpdates")
-    public void systemUpdates() {
-        basketService.systemUpdates();
     }
 }

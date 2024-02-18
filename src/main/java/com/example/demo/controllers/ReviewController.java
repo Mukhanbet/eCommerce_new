@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -27,6 +28,11 @@ public class ReviewController {
     @PutMapping("/updateById/{id}")
     public ReviewResponse updateById(@PathVariable Long id, @RequestBody ReviewRequest reviewRequest) {
         return reviewService.updateById(id, reviewRequest);
+    }
+
+    @PatchMapping("/updateByFields/{id}")
+    public ReviewResponse updateByFields(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+        return reviewService.updateByFields(id, fields);
     }
 
     @DeleteMapping("/deleteById/{id}")

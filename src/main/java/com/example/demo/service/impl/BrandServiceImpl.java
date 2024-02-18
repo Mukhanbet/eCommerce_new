@@ -53,6 +53,9 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void create(BrandRequest brandRequest) {
+        if(brandRepository.findByName(brandRequest.getName()).isPresent()) {
+            throw new BadCredentialsException("Brand with name \"" + brandRequest.getName() + "\" has already exist!");
+        }
         Brand brand = new Brand();
         brand.setName(brandRequest.getName().toUpperCase());
         brand.setPlaceOfProduction(brandRequest.getPlaceOfProduction());

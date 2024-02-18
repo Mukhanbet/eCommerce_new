@@ -20,10 +20,6 @@ public class Basket {
     private double totalSum;
     private LocalDate createdDay;
     private LocalDate endDay;
-    @Enumerated(EnumType.STRING)
-    private Status status; // todo this field should deleted
-    private String delivery; // todo maybe this field also should deleted
-    private String payment; // todo this field should deleted
     private int amount;
 
     @ManyToOne
