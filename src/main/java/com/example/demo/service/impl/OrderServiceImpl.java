@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateByField(Long id, Map<String, Object> fields) {
+    public void updateByField(Long id, Map<String, Object> fields) { // todo don't use reflectionUtils
         Optional<Order> order = orderRepository.findById(id);
         checker(order, id);
         fields.forEach((key, value) -> {

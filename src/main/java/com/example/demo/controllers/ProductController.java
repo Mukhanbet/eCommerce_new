@@ -69,6 +69,11 @@ public class ProductController {
         productService.updateById(id, productRequest);
     }
 
+    @PutMapping("/giveDiscount/product/{productId}/discount/{discountId}")
+    public void giveDiscount(@PathVariable Long productId,@PathVariable Long discountId) {
+        productService.giveDiscount(productId, discountId);
+    }
+
     @DeleteMapping("/deleteById/{id}")
     public void deleteById(@PathVariable Long id) {
         productService.deleteById(id);

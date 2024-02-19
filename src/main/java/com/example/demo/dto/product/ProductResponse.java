@@ -10,6 +10,7 @@ public class ProductResponse {
     private String name;
     private String description;
     private double price;
+    private int discount;
     private int amount;
     private String category;
     private String brand;

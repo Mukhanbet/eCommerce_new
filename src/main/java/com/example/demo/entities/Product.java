@@ -54,4 +54,7 @@ public class Product {
 
     @OneToMany(mappedBy = "enrolProductToReview")
     private List<Review> reviews;
+
+    @ManyToOne
+    private Discount discount;
 }
