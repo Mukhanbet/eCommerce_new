@@ -17,6 +17,7 @@ public interface ProductService {
     List<ProductResponse> getSolvedProductsByCategory(String category);
     ProductResponse findById(Long id);
     void updateById(Long id, ProductRequest productRequest);
+    void giveDiscount(Long productId, Long discountId);
     void deleteById(Long id);
     void create(ProductRequest productRequest);
 }

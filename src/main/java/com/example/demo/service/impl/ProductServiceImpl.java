@@ -3,12 +3,14 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.product.ProductRequest;
 import com.example.demo.dto.product.ProductResponse;
 import com.example.demo.entities.*;
+import com.example.demo.enums.StatusDiscount;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.ProductMapper;
 import com.example.demo.repositories.*;
 import com.example.demo.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
+    private final DiscountRepository discountRepository;
 
     // todo add the code which will subtract the amount of product when the person will buy it or put the basket
     @Override
@@ -154,6 +157,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void giveDiscount(Long productId, Long discountId) {
+        Optional<Product> product = productRepository.findById(productId);
+        checker(product, productId);
+        Optional<Discount> discount = discountRepository.findById(discountId);
+        if(discount.isEmpty()) {
+            throw new NotFoundException("product with id: " + discountId + " not found", HttpStatus.NOT_FOUND);
+        }
+        product.get().setDiscount(discount.get());
+        productRepository.save(product.get());
+    }
+
+    @Override
     public void deleteById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         checker(product, id);
@@ -183,6 +198,18 @@ public class ProductServiceImpl implements ProductService {
         product.setBrand(brand.get());
         product.setAddedDate(LocalDate.now());
         productRepository.save(product);
+    }
+
+    @Scheduled(fixedRate = 10000)
+    public void systemUpdate() {
+        for (Product product: productRepository.findAll()){
+            if (product.getDiscount()!=null){
+                if (product.getDiscount().getStatus().equals(StatusDiscount.INACTIVE)){
+                    product.setDiscount(null);
+                    productRepository.save(product);
+                }
+            }
+        }
     }
 
     private void checker(Optional<Product> product, Long id) {
