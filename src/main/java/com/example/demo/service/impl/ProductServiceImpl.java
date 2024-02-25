@@ -26,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     private final DiscountRepository discountRepository;
 
     // todo add the code which will subtract the amount of product when the person will buy it or put the basket
+    // todo write the function where will display product by popularity in solved
     @Override
     public List<ProductResponse> getAll() {
         return productMapper.toDtoS(productRepository.findAll());
@@ -162,9 +163,11 @@ public class ProductServiceImpl implements ProductService {
         checker(product, productId);
         Optional<Discount> discount = discountRepository.findById(discountId);
         if(discount.isEmpty()) {
-            throw new NotFoundException("product with id: " + discountId + " not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Discount with id: " + discountId + " not found", HttpStatus.NOT_FOUND);
         }
         product.get().setDiscount(discount.get());
+        double discountPrice = generateDiscountPrice(product.get().getPrice(), discount.get().getDiscount());
+        product.get().setDiscountPrice(discountPrice);
         productRepository.save(product.get());
     }
 
@@ -202,10 +205,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Scheduled(fixedRate = 10000)
     public void systemUpdate() {
-        for (Product product: productRepository.findAll()){
+        for (Product product : productRepository.findAll()){
             if (product.getDiscount()!=null){
                 if (product.getDiscount().getStatus().equals(StatusDiscount.INACTIVE)){
                     product.setDiscount(null);
+                    product.setDiscountPrice(0);
                     productRepository.save(product);
                 }
             }
@@ -216,5 +220,10 @@ public class ProductServiceImpl implements ProductService {
         if(product.isEmpty()) {
             throw new NotFoundException("product with id: " + id + " not found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    private double generateDiscountPrice(double price, int discount) {
+        double newPrice = (price * discount) / 100;
+        return price - newPrice;
     }
 }

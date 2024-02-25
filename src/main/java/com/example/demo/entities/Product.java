@@ -1,6 +1,5 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +19,7 @@ public class Product {
     private String name;
     private String description;
     private double price;
+    private double discountPrice;
     private int amount;
     private String size;
     private String color;
