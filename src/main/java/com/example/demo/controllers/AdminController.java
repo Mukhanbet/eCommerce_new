@@ -21,4 +21,9 @@ public class AdminController {
     public void updateAdmin(@RequestBody AdminRequest adminRequest) {
         adminService.updateAdmin(adminRequest);
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "It works";
+    }
 }
