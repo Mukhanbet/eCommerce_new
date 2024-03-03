@@ -49,7 +49,7 @@ public class ProductController {
         return productService.getByBrand(brand);
     }
 
-    @GetMapping("/compareWith/{firstId}/{secondId}")
+    @GetMapping("/compareWith/{firstId}/{secondId}")  // todo later
     public List<String> compareWith(@PathVariable Long firstId, @PathVariable Long secondId) {
         return productService.compareWith(firstId, secondId);
     }
