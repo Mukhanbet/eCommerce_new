@@ -8,10 +8,6 @@ This repository houses the backend code for the Online Clothing Store, an e-comm
 - [Setup](#setup)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Introduction
 
