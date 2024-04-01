@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class StorageController {
     private StorageService storageService;
 
-    @PostMapping("uploadFile")
+    @PostMapping("/uploadFile")
     public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
         return new ResponseEntity<>(storageService.uploadFile(file), HttpStatus.OK);
     }
@@ -34,5 +34,10 @@ public class StorageController {
     @GetMapping("/deleteFile/{fileName}")
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
         return new ResponseEntity<>(storageService.deleteFile(fileName), HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "It's working";
     }
 }
